@@ -52,6 +52,7 @@ class PostsRoute implements Route {
     this.router.get(`${this.path}/user-posts/`, authMiddleware, this.postController.findPostsByUser);
     this.router.delete(`${this.path}/post/:id`, authMiddleware, this.postController.deletePost);
     this.router.put(`${this.path}/react/:postId`, authMiddleware, this.postController.reactToPost);
+    this.router.put(`${this.path}/post/:id`, authMiddleware, this.postController.updatePost);
 
     //comments
     this.router.post(`${this.path}/comment/new`, authMiddleware, this.postController.createComment);

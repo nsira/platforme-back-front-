@@ -82,6 +82,7 @@ class PostController {
             next(error);
         }
     }
+    // delete post 
     public deletePost = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
         try {
             const author: User = req.user;
@@ -91,8 +92,23 @@ class PostController {
             next(error);
         }
     }
+  ///update post 
 
-    public findCommentsByPost = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public updatePost = async (req: RequestWithFile, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const user: User = req.user;
+        const postId: string = req.params.id;
+        const postData = req.body;
+        const post2: Post = await this.postService.findPostById(postId)
+        post2.content=postData.content;
+        const post: Post = await this.postService.updatePost(post2, postId);
+        res.status(201).json({ data: post, message: 'Updated post' });
+    } catch (error) {
+        next(error);
+    }
+}
+
+public findCommentsByPost = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
         try {
             const count: number = Number(req.params.count) || 0;
             const comments: Comment[] = await this.postService.findCommentsByPost(req.params.postId, count);

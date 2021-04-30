@@ -102,14 +102,22 @@ class PostService {
         const total = await postModel.countDocuments();
         return { posts, total };
     }
-
+     //delete poste 
     public async deletePost(postId: string, author: User): Promise<Post> {
         const post: Post = await postModel.findOneAndDelete({
             _id: postId, author
         });
         return post;
     }
-
+    //update poste
+    public async updatePost(postData:Post,postId) : Promise<Post>
+    {
+        if (isEmptyObject(postData) || !isValidObjectId(postData._id)) {
+            throw new HttpException(400, "Cannot create reaction");
+        }
+return postModel.findByIdAndUpdate(postId,postData)
+    }
+  
     public async deleteComment(commentId: string, author: User): Promise<Comment> {
         const comment: Comment = await commentModel.findOneAndDelete({
             _id: commentId,
@@ -117,7 +125,7 @@ class PostService {
         });
         return comment;
     }
-
+   
     public async findCommentsByPost(id: string, count: number): Promise<Comment[]> {
         const comments: Comment[] = await commentModel
             .find({ post: id })
